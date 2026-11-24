@@ -6,7 +6,7 @@ class ResultsController < ApplicationController
     if @result.save
       redirect_to chat_path(@chat), notice: "Result was successfully created."
     else
-      redirect_to chat_path(@chat), alert: @result.errors.full_messages.to_sentence
+      redirect_to chat_path(@chat), alert: "Result could not be created."
     end
   end
 
@@ -23,8 +23,8 @@ class ResultsController < ApplicationController
   end
 
   private
-
+  
   def result_params
-    params.require(:result).permit(:content)
+    params.require(:result).permit(:content, :destination, :price, :time)
   end
 end
