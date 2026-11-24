@@ -9,15 +9,27 @@
   <h1 class="mb-0 text-center">My History</h1>
 
   <div class="row g-3 text-center m-2">
-    <% results = ["Suggestion 1", "Suggestion 2",  "Suggestion 3",  "Suggestion 4"] %>
-        <% results.each do |result| %>
-          <div class="col-12 col-md-6 col-lg-4">
-            <article class="card h-100">
-              <div class="card-body">
-                <%= result %>
-              </div>
+    <% if @results.any? %>
+      <% @results.each do |result| %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <%= link_to result_path(result), class: "card h-100 text-decoration-none text-dark" do %>
+            <article class="card-body">
+              <h2 class="h5"><%= result.destination.presence || "Trip suggestion" %></h2>
+              <p class="mb-0">
+                <% if result.price.present? %>
+                  Price: <%= number_with_precision(result.price, precision: 2, strip_insignificant_zeros: true) %>
+                <% end %>
+                <% if result.time.present? %>
+                  <%= " · " if result.price.present? %>
+                  Duration: <%= pluralize(result.time, "day") %>
+                <% end %>
+              </p>
             </article>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted">Your saved trip results will appear here.</p>
+    <% end %>
   </div>
 </div>
