@@ -1,0 +1,51 @@
+
+<div class="container mt-5">
+
+  <h1 class="text-center mb-4">
+    AI Travel Assistant 🌍
+  </h1>
+
+  <div class="card p-4 mb-4">
+
+    <h5>Welcome!</h5>
+
+    <p>
+      Hello! 👋
+      I'm your AI travel assistant.
+
+      What kind of trip are you looking for?
+    </p>
+
+    <!-- Messages de la conversation -->
+    <% @messages.each do |message| %>
+
+      <div class="mb-3">
+
+        <strong>
+          <%= message.role == "user" ? "You" : "AI Assistant" %>
+        </strong>
+
+        <p><%= message.content %></p>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <!-- Formulaire pour envoyer un message -->
+  <%= form_with model: [@chat, @message] do |form| %>
+
+    <div class="mb-3">
+      <%= form.text_area :content,
+          class: "form-control",
+          placeholder: "Tell me about your dream trip...",
+          rows: 3 %>
+    </div>
+
+    <%= form.submit "Send message",
+        class: "btn btn-primary" %>
+
+  <% end %>
+
+</div>
