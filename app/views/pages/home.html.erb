@@ -1,1 +1,23 @@
-<h1>HELLO MY NAME IS AIDONOW</h1>
+<div class="container py-3 py-lg-5">
+  <div class="d-flex flex-column align-items-center text-center gap-3 mb-4">
+    <%= button_to "START", chats_path,
+                  method: :post,
+                  class: "btn btn-primary" %>
+    <p>"Your next adventure starts with a chat"</p>
+  </div>
+
+  <h1 class="mb-0 text-center">My History</h1>
+
+  <div class="row g-3 text-center m-2">
+    <% results = ["Suggestion 1", "Suggestion 2",  "Suggestion 3",  "Suggestion 4"] %>
+        <% results.each do |result| %>
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="card h-100">
+              <div class="card-body">
+                <%= result %>
+              </div>
+            </article>
+          </div>
+        <% end %>
+  </div>
+</div>
