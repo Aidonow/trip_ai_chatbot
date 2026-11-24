@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_24_142617) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_142618) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "chats", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "result_id", null: false
+    t.bigint "result_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["result_id"], name: "index_chats_on_result_id"
@@ -36,12 +36,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_142617) do
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "price_range"
-    t.string "activity"
     t.string "destination"
-    t.integer "duration"
-    t.date "start_date"
-    t.date "end_date"
     t.decimal "price", precision: 10, scale: 2
     t.integer "time"
   end
