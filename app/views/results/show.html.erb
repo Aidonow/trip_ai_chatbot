@@ -28,7 +28,11 @@
             <div class="result-content"><%= simple_format(@result.content) %></div>
           <% end %>
 
-          <%= link_to "Open conversation", chat_path(@chat), class: "btn btn-primary mt-3" %>
+          <%= button_to "Delete suggestion",
+              result_path(@result),
+              method: :delete,
+              class: "btn btn-outline-danger",
+              form: { data: { turbo_confirm: "Delete this suggestion?" } } %>
         </div>
       </section>
     </div>
