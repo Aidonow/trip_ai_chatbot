@@ -12,5 +12,6 @@ def create
     @chats = @challenge.chats.where(user: current_user)
     render "challenges/show"
   end
+  
 end
 end
