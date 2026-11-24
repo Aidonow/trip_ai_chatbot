@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   resources :chats, only: [:create, :show] do
     resources :messages, only: [:create]
-    resources :results, only: [:create, :destroy]
+    resources :results, only: [:create]
   end
+  resources :resuls, only: [:index, :show, :destroy]
 end
