@@ -36,7 +36,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_142618) do
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "price_range"
+    t.string "activity"
     t.string "destination"
+    t.integer "duration"
+    t.date "start_date"
+    t.date "end_date"
     t.decimal "price", precision: 10, scale: 2
     t.integer "time"
   end
