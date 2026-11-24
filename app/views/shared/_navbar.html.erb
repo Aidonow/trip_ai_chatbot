@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
   <div class="container-fluid">
-    <%= link_to "#", class: "navbar-brand" do %>
+    <%= link_to root_path, class: "navbar-brand" do %>
       <%= image_tag "logo.png" %>
     <% end %>
 
@@ -11,19 +11,12 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
         <% if user_signed_in? %>
-          <li class="nav-item active">
-            <%= link_to "Home", "#", class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Messages", "#", class: "nav-link" %>
-          </li>
-          <li class="nav-item dropdown">
           <button type="button"
                   class="avatar avatar-blue"
                   id="navbarDropdown"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
-                  aria-label="Ouvrir le menu du compte">
+                  aria-label="Open your account">
             <%= current_user.email.first.upcase %>
           </button>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -31,7 +24,6 @@
               <%= link_to "Another action", "#", class: "dropdown-item" %>
               <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
             </div>
-          </li>
         <% else %>
           <li class="nav-item">
             <%= link_to "Login", new_user_session_path, class: "nav-link" %>
