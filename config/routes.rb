@@ -17,5 +17,5 @@ Rails.application.routes.draw do
     resources :messages, only: [:create]
     resources :results, only: [:create]
   end
-  resources :resuls, only: [:index, :show, :destroy]
+  resources :results, only: [:index, :show, :destroy]
 end
