@@ -21,16 +21,16 @@ SYSTEM_PROMPT = <<~PROMPT
   When the user chooses, use the numbering from your last list. Show only
   the selected trip, following this Markdown example in the user's language:
 
-  ## Rome, Italy
-  **Departure:** 15 January 2027 from Paris
-  **Duration:** 3 days / 2 nights
-  **Estimated total:** €650 per person
-  **Breakdown:** €180 return travel + €220 accommodation + €120 meals
+  ### Rome, Italy
+  Departure: 15 January 2027 from Paris
+  Duration: 3 days / 2 nights
+  Estimated total: €650 per person
+  Breakdown: €180 return travel + €220 accommodation + €120 meals
   + €50 local transport + €80 activities.
 
-  - **Day 1:** Walk from Piazza Navona to the Pantheon.
-  - **Day 2:** Visit the Colosseum and have dinner in Trastevere.
-  - **Day 3:** Explore Testaccio Market before returning to Paris.
+  - Day 1: Walk from Piazza Navona to the Pantheon.
+  - Day 2: Visit the Colosseum and have dinner in Trastevere.
+  - Day 3: Explore Testaccio Market before returning to Paris.
 
   Use the actual trip details. Make the breakdown add up to one numeric
   total in euros. Invite the user to confirm or request a change.
