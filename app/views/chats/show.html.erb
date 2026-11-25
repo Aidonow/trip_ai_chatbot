@@ -1,51 +1,46 @@
-
 <div class="container mt-5">
-
-  <h1 class="text-center mb-4">
-    AI Travel Assistant 🌍
-  </h1>
+  <h1 class="text-center mb-4">AI Travel Assistant 🌍</h1>
 
   <div class="card p-4 mb-4">
-
-    <h5>Welcome!</h5>
+    <h2 class="h5">Welcome!</h2>
 
     <p>
-      Hello! 👋
-      I'm your AI travel assistant.
-
+      Hello! 👋 I’m your AI travel assistant.
       What kind of trip are you looking for?
     </p>
 
     <!-- Messages de la conversation -->
-    <% @messages.each do |message| %>
+<% @messages.each_with_index do |message, index| %>
+  <div class="mb-3">
+    <strong><%= message.role == "user" ? "You" : "AI Assistant" %></strong>
+    <%= sanitize(render_markdown(message.content)) %>
 
-      <div class="mb-3">
+    <% previous_message = @messages[index - 1] if index.positive? %>
+    <% if message.role == "assistant" &&
+          previous_message&.role == "user" &&
+          %w[1 2 3].include?(previous_message.content.strip) %>
 
-        <strong>
-          <%= message.role == "user" ? "You" : "AI Assistant" %>
-        </strong>
-
-        <p><%= message.content %></p>
-
-      </div>
-
+      <%= button_to "Confirm this destination",
+                    chat_results_path(@chat),
+                    method: :post,
+                    params: { message_id: message.id },
+                    class: "btn btn-success" %>
     <% end %>
-
+  </div>
+<% end %>
   </div>
 
   <!-- Formulaire pour envoyer un message -->
   <%= form_with model: [@chat, @message] do |form| %>
-
     <div class="mb-3">
+      <%= form.label :content, "Your message", class: "visually-hidden" %>
       <%= form.text_area :content,
-          class: "form-control",
-          placeholder: "Tell me about your dream trip...",
-          rows: 3 %>
+                         class: "form-control",
+                         placeholder: "Tell me about your dream trip...",
+                         rows: 3,
+                         required: true %>
     </div>
 
-    <%= form.submit "Send message",
-        class: "btn btn-primary" %>
-
+    <%= form.submit "Send message", class: "btn btn-primary" %>
   <% end %>
-
 </div>
