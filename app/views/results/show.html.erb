@@ -1,44 +1,73 @@
-<main class="container py-4 py-lg-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-8">
-      <%= link_to "Back to history", root_path, class: "text-decoration-none" %>
+<main class="result-page">
+  <%= link_to root_path, class: "result-back-link" do %>
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    Back to my trips
+  <% end %>
 
-      <section class="card shadow-sm mt-3">
-        <div class="card-body p-4 p-lg-5">
-          <p class="text-uppercase text-muted small mb-2">Your trip suggestion</p>
-          <h1 class="mb-4"><%= @result.destination.presence || "Trip details" %></h1>
-
-          <dl class="row mb-4">
-            <dt class="col-sm-4">Destination</dt>
-            <dd class="col-sm-8"><%= @result.destination.presence || "Not specified" %></dd>
-
-            <dt class="col-sm-4">Price</dt>
-            <dd class="col-sm-8">
-              <%= @result.price.present? ? number_with_precision(@result.price, precision: 2, strip_insignificant_zeros: true) : "Not specified" %>
-            </dd>
-
-            <dt class="col-sm-4">Duration</dt>
-            <dd class="col-sm-8">
-              <%= @result.time.present? ? pluralize(@result.time, "day") : "Not specified" %>
-            </dd>
-          </dl>
-
-          <% if @result.content.present? %>
-            <h2 class="h5">Details</h2>
-            <div class="result-content"><%= simple_format(@result.content) %></div>
-          <% end %>
-
-          <div class="d-flex justify-content-end align-items-center gap-2">
-            <%= link_to "Open the chat", chat_path(@chat), class: "btn btn-primary" %>
-
-            <%= button_to "Delete",
-                          result_path(@result),
-                          method: :delete,
-                          class: "btn btn-outline-danger",
-                          form: { data: { turbo_confirm: "Delete this suggestion?" } } %>
-          </div>
-        </div>
-      </section>
+  <section class="result-hero<%= " result-hero--with-image" if @result_image.present? %>">
+    <% if @result_image.present? %>
+      <%= image_tag @result_image,
+                    class: "result-hero__image",
+                    alt: "",
+                    fetchpriority: "high" %>
+    <% end %>
+    <div class="result-hero__content">
+      <p class="result-kicker">Your trip suggestion</p>
+      <h1><%= @result.destination.presence || "Trip details" %></h1>
+      <p class="result-hero__caption">A travel idea made just for you.</p>
     </div>
+    <% unless @result_image.present? %>
+      <div class="result-hero__icon" aria-hidden="true">
+        <i class="fa-solid fa-location-dot"></i>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="result-facts" aria-label="Trip overview">
+    <article class="result-fact">
+      <span class="result-fact__icon" aria-hidden="true"><i class="fa-solid fa-map"></i></span>
+      <div>
+        <p>Destination</p>
+        <strong><%= @result.destination.presence || "Not specified" %></strong>
+      </div>
+    </article>
+
+    <article class="result-fact">
+      <span class="result-fact__icon" aria-hidden="true"><i class="fa-solid fa-wallet"></i></span>
+      <div>
+        <p>Estimated budget</p>
+        <strong>
+          <%= @result.price.present? ? number_to_currency(@result.price, unit: "€", format: "%n %u", precision: 0) : "Not specified" %>
+        </strong>
+      </div>
+    </article>
+
+    <article class="result-fact">
+      <span class="result-fact__icon" aria-hidden="true"><i class="fa-regular fa-clock"></i></span>
+      <div>
+        <p>Duration</p>
+        <strong><%= @result.time.present? ? pluralize(@result.time, "day") : "Not specified" %></strong>
+      </div>
+    </article>
+  </section>
+
+  <% if @result.content.present? %>
+    <section class="result-details">
+      <p class="result-kicker">Your itinerary</p>
+      <h2>Trip details</h2>
+      <div class="result-details__content"><%= simple_format(@result.content) %></div>
+    </section>
+  <% end %>
+
+  <div class="result-actions">
+    <%= button_to "Delete trip",
+                  result_path(@result),
+                  method: :delete,
+                  class: "result-delete-button",
+                  form: { data: { turbo_confirm: "Delete this suggestion?" } } %>
+    <%= link_to chat_path(@chat), class: "result-chat-button" do %>
+      Continue in chat
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    <% end %>
   </div>
 </main>
