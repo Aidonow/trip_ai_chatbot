@@ -17,11 +17,11 @@
             <h2 class="h5 card-title"><%= result.destination %></h2>
 
             <p class="card-text mb-1">
-              <%= pluralize(result.time.to_i, "jour", "jours") %>
+              <%= pluralize(result.time.to_i, "day", "days") %>
             </p>
 
             <p class="card-text">
-              Budget total estimé ·
+              Budget:
               <%= number_to_currency(result.price, unit: "€", format: "%n %u", precision: 0) %>
             </p>
           </div>
