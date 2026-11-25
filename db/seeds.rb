@@ -1,7 +1,7 @@
 # db/seeds.rb
 
 user = User.find_or_create_by!(email: "demo@example.com") do |new_user|
-  new_user.password = "123456"
+  new_user.password = ENV.fetch("DEMO_PASSWORD")
 end
 
 # Conversation 1 : l'utilisateur donne tous ses critères dès le début.
