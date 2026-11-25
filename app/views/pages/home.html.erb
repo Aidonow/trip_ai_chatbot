@@ -1,32 +1,74 @@
-<div class="container py-3 py-lg-5">
-  <div class="d-flex flex-column align-items-center text-center gap-3 mb-4">
-    <%= button_to "START", chats_path,
-                  method: :post,
-                  class: "btn btn-primary" %>
-    <p>"Your next adventure starts with a chat"</p>
-  </div>
+<main class="home-page">
+  <section class="home-hero">
+    <div class="home-hero__content">
+      <p class="home-kicker">AI travel planner</p>
+      <h1>Your next trip,<br>planned in a chat.</h1>
+      <p class="home-description">
+        Tell us where you want to go and what matters to you. We'll help you find the right adventure.
+      </p>
 
-  <h1 class="mb-0 text-center">My History</h1>
+      <%= button_to chats_path,
+                    method: :post,
+                    class: "home-primary-button" do %>
+        Start planning
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <% end %>
+    </div>
 
-  <div class="row g-3 text-center m-2">
-    <%# results = ["Suggestion 1", "Suggestion 2",  "Suggestion 3",  "Suggestion 4"] %>
-    <% @results.each do |result| %>
-      <div class="col-12 col-md-6 col-lg-4">
-        <%= link_to result_path(result), class: "card h-100 text-decoration-none text-body" do %>
-          <div class="card-body">
-            <h2 class="h5 card-title"><%= result.destination %></h2>
+    <div class="home-hero__visual" aria-hidden="true">
+      <i class="fa-solid fa-plane"></i>
+    </div>
+  </section>
 
-            <p class="card-text mb-1">
-              <%= pluralize(result.time.to_i, "day", "days") %>
-            </p>
+  <section class="home-history">
+    <div class="home-history__header">
+      <div>
+        <p class="home-kicker">Saved destinations</p>
+        <h2>My trips</h2>
+      </div>
 
-            <p class="card-text">
-              Budget:
-              <%= number_to_currency(result.price, unit: "€", format: "%n %u", precision: 0) %>
-            </p>
-          </div>
+      <% if @results.any? %>
+        <span class="home-trip-count"><%= pluralize(@results.count, "trip") %></span>
+      <% end %>
+    </div>
+
+    <% if @results.any? %>
+      <div class="home-trip-grid">
+        <% @results.each do |result| %>
+          <%= link_to result_path(result), class: "home-trip-card" do %>
+            <div class="home-trip-card__banner">
+              <% if @result_images[result].present? %>
+                <%= image_tag @result_images[result],
+                              alt: "#{result.destination} travel destination",
+                              loading: "lazy",
+                              decoding: "async" %>
+              <% else %>
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <% end %>
+            </div>
+
+            <div class="home-trip-card__content">
+              <div class="home-trip-card__body">
+                <h3><%= result.destination %></h3>
+                <p><%= pluralize(result.time.to_i, "day", "days") %></p>
+              </div>
+
+              <div class="home-trip-card__budget">
+                <span>Budget</span>
+                <strong><%= number_to_currency(result.price, unit: "€", format: "%n %u", precision: 0) %></strong>
+              </div>
+            </div>
+          <% end %>
         <% end %>
       </div>
+    <% else %>
+      <div class="home-empty">
+        <i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i>
+        <div>
+          <h3>No saved trips yet</h3>
+          <p>Plan your first trip to see it here.</p>
+        </div>
+      </div>
     <% end %>
-  </div>
-</div>
+  </section>
+</main>
