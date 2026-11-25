@@ -52,11 +52,7 @@
   </section>
 
   <% if @result.content.present? %>
-    <section class="result-details">
-      <p class="result-kicker">Your itinerary</p>
-      <h2>Trip details</h2>
-      <div class="result-details__content"><%= simple_format(@result.content) %></div>
-    </section>
+
   <% end %>
       <section class="card shadow-sm mt-3">
         <div class="card-body p-4 p-lg-5">
@@ -84,7 +80,7 @@
           <%= sanitize(render_markdown(markdown)) %>
 
           <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
-            <%= link_to "Open the chat", chat_path(@chat), class: "btn btn-primary" %>
+
 
   <div class="result-actions">
     <%= button_to "Delete trip",
