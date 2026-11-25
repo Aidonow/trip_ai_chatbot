@@ -58,6 +58,33 @@
       <div class="result-details__content"><%= simple_format(@result.content) %></div>
     </section>
   <% end %>
+      <section class="card shadow-sm mt-3">
+        <div class="card-body p-4 p-lg-5">
+          <%
+            title = @result.destination.presence || "Trip details"
+            destination = @result.destination.presence || "Not specified"
+            price = @result.price.present? ? number_to_currency(@result.price, unit: "€", strip_insignificant_zeros: true) : "Not specified"
+            duration = @result.time.present? ? pluralize(@result.time, "day") : "Not specified"
+
+            markdown = <<~MARKDOWN
+              Your trip suggestion
+
+              # #{title}
+
+              - **Destination:** #{destination}
+              - **Price:** #{price}
+              - **Duration:** #{duration}
+            MARKDOWN
+
+            if @result.content.present?
+              markdown += "\n## Details\n\n#{@result.content}"
+            end
+          %>
+
+          <%= sanitize(render_markdown(markdown)) %>
+
+          <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
+            <%= link_to "Open the chat", chat_path(@chat), class: "btn btn-primary" %>
 
   <div class="result-actions">
     <%= button_to "Delete trip",
