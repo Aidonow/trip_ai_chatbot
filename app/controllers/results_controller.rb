@@ -19,6 +19,11 @@ end
     @result = @chat.result
   end
 
+  def show
+    @chat = current_user.chats.find_by!(result_id: params[:id])
+    @result = @chat.result
+  end
+
   def destroy
     @chat = current_user.chats.find_by!(result_id: params[:id])
     @result = @chat.result
