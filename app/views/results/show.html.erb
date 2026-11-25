@@ -1,0 +1,36 @@
+<main class="container py-4 py-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <%= link_to "Back to history", root_path, class: "text-decoration-none" %>
+
+      <section class="card shadow-sm mt-3">
+        <div class="card-body p-4 p-lg-5">
+          <p class="text-uppercase text-muted small mb-2">Your trip suggestion</p>
+          <h1 class="mb-4"><%= @result.destination.presence || "Trip details" %></h1>
+
+          <dl class="row mb-4">
+            <dt class="col-sm-4">Destination</dt>
+            <dd class="col-sm-8"><%= @result.destination.presence || "Not specified" %></dd>
+
+            <dt class="col-sm-4">Price</dt>
+            <dd class="col-sm-8">
+              <%= @result.price.present? ? number_with_precision(@result.price, precision: 2, strip_insignificant_zeros: true) : "Not specified" %>
+            </dd>
+
+            <dt class="col-sm-4">Duration</dt>
+            <dd class="col-sm-8">
+              <%= @result.time.present? ? pluralize(@result.time, "day") : "Not specified" %>
+            </dd>
+          </dl>
+
+          <% if @result.content.present? %>
+            <h2 class="h5">Details</h2>
+            <div class="result-content"><%= simple_format(@result.content) %></div>
+          <% end %>
+
+          <%= link_to "Open conversation", chat_path(@chat), class: "btn btn-primary mt-3" %>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

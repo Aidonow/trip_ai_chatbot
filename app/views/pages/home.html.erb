@@ -9,15 +9,24 @@
   <h1 class="mb-0 text-center">My History</h1>
 
   <div class="row g-3 text-center m-2">
-    <% results = ["Suggestion 1", "Suggestion 2",  "Suggestion 3",  "Suggestion 4"] %>
-        <% results.each do |result| %>
-          <div class="col-12 col-md-6 col-lg-4">
-            <article class="card h-100">
-              <div class="card-body">
-                <%= result %>
-              </div>
-            </article>
+    <%# results = ["Suggestion 1", "Suggestion 2",  "Suggestion 3",  "Suggestion 4"] %>
+    <% @results.each do |result| %>
+      <div class="col-12 col-md-6 col-lg-4">
+        <%= link_to result_path(result), class: "card h-100 text-decoration-none text-body" do %>
+          <div class="card-body">
+            <h2 class="h5 card-title"><%= result.destination %></h2>
+
+            <p class="card-text mb-1">
+              <%= pluralize(result.time.to_i, "jour", "jours") %>
+            </p>
+
+            <p class="card-text">
+              Budget total estimé ·
+              <%= number_to_currency(result.price, unit: "€", format: "%n %u", precision: 0) %>
+            </p>
           </div>
         <% end %>
+      </div>
+    <% end %>
   </div>
 </div>
