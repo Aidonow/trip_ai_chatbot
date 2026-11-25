@@ -1,0 +1,13 @@
+<%= simple_form_for [chat, message] do |f| %>
+  <%= f.label :content, "Ask a question", class: "form-label" %>
+
+  <div class="input-group gap-2">
+    <%= f.input_field :content,
+                      as: :string,
+                      class: "form-control",
+                      required: true,
+                      placeholder: "I want to travel for 5 days in December with a budget of €800." %>
+
+    <%= f.button :submit, "Send", class: "btn btn-primary" %>
+  </div>
+<% end %>
