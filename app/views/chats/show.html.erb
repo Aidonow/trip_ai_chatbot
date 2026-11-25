@@ -13,7 +13,7 @@
 <% @messages.each_with_index do |message, index| %>
   <div class="mb-3">
     <strong><%= message.role == "user" ? "You" : "AI Assistant" %></strong>
-    <%= simple_format(message.content) %>
+    <%= sanitize(rendre_markdown(message.content)) %>
 
     <% previous_message = @messages[index - 1] if index.positive? %>
     <% if message.role == "assistant" &&
