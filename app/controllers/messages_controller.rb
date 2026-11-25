@@ -37,33 +37,36 @@ SYSTEM_PROMPT = <<~PROMPT
   Use [CHOICES] only after a list of three destinations.
 PROMPT
 
-  def create
-    @message = @chat.messages.new(message_params)
-    @message.role = "user"
+def create
+  @message = @chat.messages.new(message_params)
+  @message.role = "user"
 
-    unless @message.valid?
-      flash.now[:alert] = @message.errors.full_messages.to_sentence
-      return render_chat
-    end
-
-    chatbot = RubyLLM.chat.with_instructions(SYSTEM_PROMPT)
-
-    @chat.messages.order(:created_at, :id).each do |message|
-      chatbot.add_message(role: message.role.to_sym, content: message.content)
-    end
-    response = chatbot.ask(@message.content)
-
-    Message.transaction do
-      @message.save!
-      @chat.messages.create!(role: "assistant", content: response.content)
-    end
-
-    redirect_to chat_path(@chat), status: :see_other
-  rescue RubyLLM::Error => e
-    Rails.logger.warn("RubyLLM: #{e.class}")
-    flash.now[:alert] = "The assistant could not reply. Please try again."
-    render_chat
+  unless @message.valid?
+    flash.now[:alert] = @message.errors.full_messages.to_sentence
+    return render_chat
   end
+
+  @ruby_llm_chat = RubyLLM.chat.with_instructions(SYSTEM_PROMPT)
+  build_conversation_history
+  response = @ruby_llm_chat.ask(@message.content)
+
+  Message.transaction do
+    @message.save!
+    @assistant_message = @chat.messages.create!(
+      role: "assistant",
+      content: response.content
+    )
+  end
+
+  respond_to do |format|
+    format.turbo_stream
+    format.html { redirect_to chat_path(@chat), status: :see_other }
+  end
+rescue RubyLLM::Error => e
+  Rails.logger.warn("RubyLLM: #{e.class}")
+  flash.now[:alert] = "The assistant could not reply. Please try again."
+  render_chat
+end
 
   private
 
@@ -78,5 +81,14 @@ PROMPT
   def render_chat
     @messages = @chat.messages.order(:created_at, :id)
     render "chats/show", status: :unprocessable_entity
+  end
+
+  def build_conversation_history
+    @chat.messages.order(:created_at, :id).each do |message|
+      @ruby_llm_chat.add_message(
+        role: message.role.to_sym,
+        content: message.content
+      )
+    end
   end
 end

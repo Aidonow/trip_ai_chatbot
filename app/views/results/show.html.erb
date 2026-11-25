@@ -5,30 +5,30 @@
 
       <section class="card shadow-sm mt-3">
         <div class="card-body p-4 p-lg-5">
-          <p class="text-uppercase text-muted small mb-2">Your trip suggestion</p>
-          <h1 class="mb-4"><%= @result.destination.presence || "Trip details" %></h1>
+          <%
+            title = @result.destination.presence || "Trip details"
+            destination = @result.destination.presence || "Not specified"
+            price = @result.price.present? ? number_to_currency(@result.price, unit: "€", strip_insignificant_zeros: true) : "Not specified"
+            duration = @result.time.present? ? pluralize(@result.time, "day") : "Not specified"
 
-          <dl class="row mb-4">
-            <dt class="col-sm-4">Destination</dt>
-            <dd class="col-sm-8"><%= @result.destination.presence || "Not specified" %></dd>
+            markdown = <<~MARKDOWN
+              Your trip suggestion
 
-            <dt class="col-sm-4">Price</dt>
-            <dd class="col-sm-8">
-              <%= @result.price.present? ? number_with_precision(@result.price, precision: 2, strip_insignificant_zeros: true) : "Not specified" %>
-            </dd>
+              # #{title}
 
-            <dt class="col-sm-4">Duration</dt>
-            <dd class="col-sm-8">
-              <%= @result.time.present? ? pluralize(@result.time, "day") : "Not specified" %>
-            </dd>
-          </dl>
+              - **Destination:** #{destination}
+              - **Price:** #{price}
+              - **Duration:** #{duration}
+            MARKDOWN
 
-          <% if @result.content.present? %>
-            <h2 class="h5">Details</h2>
-            <div class="result-content"><%= simple_format(@result.content) %></div>
-          <% end %>
+            if @result.content.present?
+              markdown += "\n## Details\n\n#{@result.content}"
+            end
+          %>
 
-          <div class="d-flex justify-content-end align-items-center gap-2">
+          <%= sanitize(render_markdown(markdown)) %>
+
+          <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
             <%= link_to "Open the chat", chat_path(@chat), class: "btn btn-primary" %>
 
             <%= button_to "Delete",
