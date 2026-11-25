@@ -1,146 +1,125 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-puts "Nettoyage de la base..."
-Message.destroy_all
-Result.destroy_all
-Chat.destroy_all
+# db/seeds.rb
 
-puts "Création des chats..."
-chat1 = Chat.create!
-chat2 = Chat.create!
+user = User.find_or_create_by!(email: "demo@example.com") do |new_user|
+  new_user.password = "123456"
+end
 
-puts "Création des messages..."
-chat1.messages.create!(role: "user", content: "Bonjour, je voudrais organiser un voyage à Lisbonne.")
-chat1.messages.create!(role: "assistant", content: "Avec plaisir ! Combien de jours souhaitez-vous y passer ?")
-chat1.messages.create!(role: "user", content: "Environ 4 jours.")
+# Conversation 1 : l'utilisateur donne tous ses critères dès le début.
+rome_options = <<~TEXT.strip
+  Here are three ideas for a solo trip from Paris, leaving on 15 January 2027
+  for 3 days and 2 nights. Each estimate covers the whole stay, including
+  return travel, accommodation, meals, local transport, and activities.
 
-chat2.messages.create!(role: "user", content: "Quelles sont les meilleures plages en Grèce ?")
-chat2.messages.create!(role: "assistant", content: "Parmi les plus belles : Navagio à Zakynthos, Elafonissi en Crète et Milos.")
+  1. Seville, Spain — €590. Explore Santa Cruz and the Real Alcázar.
+  2. Rome, Italy — €650. Discover ancient Rome and try Roman food in Testaccio.
+  3. Prague, Czechia — €540. Walk through the Old Town and visit Prague Castle.
 
-puts "Terminé : #{Chat.count} chats et #{Message.count} messages créés."
+  These are estimates and depend on availability. Which destination do you prefer?
+  Reply with 1, 2, or 3.
 
-user = User.create!(email: "test@example.com", password: "password")
-chat1 = Chat.create!(user: user)
-chat2 = Chat.create!(user: user)
-user = User.find_by!(email: "dqavnn@gmail.com")
+  [CHOICES]
+TEXT
 
-suggestions = [
+rome_itinerary = <<~TEXT.strip
+  A winter weekend in Rome, Italy — 3 days, 2 nights
+
+  Departure: 15 January 2027 from Paris. Return: 17 January 2027.
+  Estimated total for one person: €650.
+
+  Day 1: Fly to Rome and check in. Walk from Piazza Navona to the Pantheon,
+  then stop for a plate of cacio e pepe near Campo de' Fiori.
+
+  Day 2: Spend the morning at the Colosseum and Roman Forum. In the afternoon,
+  cross the river for a walk and dinner in Trastevere.
+
+  Day 3: Visit Testaccio Market for breakfast and pick up something for lunch
+  before travelling back to the airport.
+
+  Budget breakdown: €180 return flights, €220 accommodation, €120 meals,
+  €50 local transport, and €80 activities. Prices are estimates.
+TEXT
+
+# Conversation 2 : l'IA doit d'abord demander les informations manquantes.
+lyon_options = <<~TEXT.strip
+  For 2 days and 1 night from Paris, leaving on 12 March 2027, here are three
+  food-focused trips within your €350 budget. Estimates include return travel.
+
+  1. Lyon, France — €320. Explore the bouchons and the food market at Les Halles.
+  2. Lille, France — €275. Try an estaminet and visit the bakeries of Vieux-Lille.
+  3. Dijon, France — €295. Discover Burgundy specialities around the old town.
+
+  Which destination sounds best? Reply with 1, 2, or 3.
+
+  [CHOICES]
+TEXT
+
+lyon_itinerary = <<~TEXT.strip
+  A food weekend in Lyon, France — 2 days, 1 night
+
+  Departure: 12 March 2027 from Paris. Return: 13 March 2027.
+  Estimated total for one person: €320.
+
+  Day 1: Take the train to Lyon and leave your bag at the hotel. Explore
+  Vieux Lyon on foot, then try a traditional quenelle at a local bouchon.
+
+  Day 2: Start at Les Halles de Lyon Paul Bocuse. Pick up cheese and a praline
+  tart, then walk along the Rhône before taking the train back to Paris.
+
+  Budget breakdown: €100 return train tickets, €95 accommodation, €85 meals,
+  €15 local transport, and €25 activities. Prices are estimates.
+TEXT
+
+trips = [
   {
-    destination: "Lyon, France",
-    time: 3,
-    price: 360,
-    content: <<~TEXT
-      Food and history in Lyon — 3 days, 2 nights
-
-      Day 1: Check in near the old town. Explore the traboules of Vieux Lyon,
-      then try a traditional pike quenelle at a local bouchon.
-
-      Day 2: Start at the Croix-Rousse market and pick up cheese, bread, and
-      fruit for a picnic in Parc de la Tête d’Or. Spend the evening by the Rhône.
-
-      Day 3: Take the funicular to Fourvière for a morning view of the city.
-      Walk down through the gardens and stop for lunch before departure.
-
-      Estimated total for one person: €360.
-      Accommodation: €180 for 2 nights. Meals: €120.
-      Local transport: €30. Activities: €30.
-    TEXT
+    messages: [
+      ["user", "I'm travelling alone from Paris on 15 January 2027 for 3 days. My total budget is €700. I like history and local food."],
+      ["assistant", rome_options],
+      ["user", "2"],
+      ["assistant", rome_itinerary]
+    ],
+    result: {
+      destination: "Rome, Italy",
+      price: 650,
+      time: 3,
+      content: rome_itinerary
+    }
   },
   {
-    destination: "Annecy, France",
-    time: 2,
-    price: 220,
-    content: <<~TEXT
-      A weekend by Lake Annecy — 2 days, 1 night
-
-      Day 1: Follow the canals through the old town and have lunch near the
-      Palais de l’Île. Walk to the Pont des Amours, then enjoy a Savoyard dinner.
-
-      Day 2: Rent a bike and follow the lakeside path to Sévrier. Bring a picnic
-      and stop by the water before cycling back to Annecy in the afternoon.
-
-      Estimated total for one person: €220.
-      Accommodation: €100 for 1 night. Meals: €75.
-      Bike rental: €30. Other local transport: €15.
-    TEXT
-  },
-  {
-    destination: "Lisbon, Portugal",
-    time: 4,
-    price: 480,
-    content: <<~TEXT
-      Neighbourhoods and viewpoints in Lisbon — 4 days, 3 nights
-
-      Day 1: Settle into your hotel and explore Baixa on foot. Finish the day
-      at Praça do Comércio with dinner near the river.
-
-      Day 2: Walk through Alfama in the morning, stopping at viewpoints along
-      the way. In the evening, have dinner and listen to a live fado performance.
-
-      Day 3: Take public transport to Belém. Walk along the waterfront, visit
-      the Jerónimos Monastery, and stop for a pastel de nata.
-
-      Day 4: Browse the bookshops around Chiado and enjoy a final café lunch
-      before departure.
-
-      Estimated total for one person: €480.
-      Accommodation: €240 for 3 nights. Meals: €150.
-      Local transport: €30. Admissions and fado: €60.
-    TEXT
-  },
-  {
-    destination: "Barcelona, Spain",
-    time: 3,
-    price: 420,
-    content: <<~TEXT
-      Architecture and the sea in Barcelona — 3 days, 2 nights
-
-      Day 1: Explore the Gothic Quarter on foot. Stop for tapas in El Born
-      and walk to the harbour in the late afternoon.
-
-      Day 2: Visit the Sagrada Família in the morning. After lunch, head to
-      Park Güell for the mosaic terraces and city views. Book both visits ahead.
-
-      Day 3: Start with a walk along Barceloneta beach, then have a seafood
-      lunch before collecting your luggage.
-
-      Estimated total for one person: €420.
-      Accommodation: €200 for 2 nights. Meals: €130.
-      Local transport: €25. Admission tickets: €65.
-    TEXT
-  },
-  {
-    destination: "Amsterdam, Netherlands",
-    time: 2,
-    price: 295,
-    content: <<~TEXT
-      Canals and art in Amsterdam — 2 days, 1 night
-
-      Day 1: Explore the Jordaan and stop for lunch at a neighbourhood café.
-      Take an afternoon canal cruise, then have dinner near your hotel.
-
-      Day 2: Spend the morning at the Rijksmuseum. After lunch, walk through
-      Vondelpark and stop for a coffee before departure.
-
-      Estimated total for one person: €295.
-      Accommodation: €130 for 1 night. Meals: €90.
-      Local transport: €20. Museum admission and canal cruise: €55.
-    TEXT
+    messages: [
+      ["user", "I'd love a short food trip. My total budget is €350."],
+      ["assistant", "Which city are you leaving from, on what date, and for how many days?"],
+      ["user", "From Paris on 12 March 2027, for 2 days."],
+      ["assistant", lyon_options],
+      ["user", "1"],
+      ["assistant", lyon_itinerary]
+    ],
+    result: {
+      destination: "Lyon, France",
+      price: 320,
+      time: 2,
+      content: lyon_itinerary
+    }
   }
 ]
 
-ActiveRecord::Base.transaction do
-  suggestions.each do |attributes|
-    result = Result.find_or_create_by!(attributes)
-    user.chats.find_or_create_by!(result: result)
+user.with_lock do
+  trips.each do |trip|
+    # Retrouve ce chat de démonstration si le seed a déjà été exécuté.
+    first_question = trip.fetch(:messages).first.last
+    chat = user.chats.joins(:messages).find_by(
+      messages: { role: "user", content: first_question }
+    )
+    chat ||= user.chats.create!
+
+    trip.fetch(:messages).each do |role, content|
+      chat.messages.find_or_create_by!(role: role, content: content)
+    end
+
+    # Simule le clic sur « Confirm this destination ».
+    result = chat.result || Result.new
+    result.update!(trip.fetch(:result))
+    chat.update!(result: result)
   end
 end
 
-puts "#{suggestions.size} travel suggestions are ready for user #{user.id}."
+puts "Deux voyages de démonstration sont prêts pour #{user.email}."

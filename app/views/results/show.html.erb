@@ -28,11 +28,15 @@
             <div class="result-content"><%= simple_format(@result.content) %></div>
           <% end %>
 
-          <%= button_to "Delete suggestion",
-              result_path(@result),
-              method: :delete,
-              class: "btn btn-outline-danger",
-              form: { data: { turbo_confirm: "Delete this suggestion?" } } %>
+          <div class="d-flex justify-content-end align-items-center gap-2">
+            <%= link_to "Open the chat", chat_path(@chat), class: "btn btn-primary" %>
+
+            <%= button_to "Delete",
+                          result_path(@result),
+                          method: :delete,
+                          class: "btn btn-outline-danger",
+                          form: { data: { turbo_confirm: "Delete this suggestion?" } } %>
+          </div>
         </div>
       </section>
     </div>
