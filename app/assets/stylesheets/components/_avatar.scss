@@ -32,3 +32,13 @@
   justify-content: center;
   font-weight: 700;
 }
+
+.chat-avatar--user {
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #342c83;
+  color: white;
+  font-weight: 700;
+}

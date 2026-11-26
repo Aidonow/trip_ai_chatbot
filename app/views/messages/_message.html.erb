@@ -1,46 +1,77 @@
-
 <% messages.each_with_index do |message, index| %>
-  <div class="d-flex w-100 mb-3 <%= message.role == 'user' ? 'justify-content-end' : 'justify-content-start' %>">
+  <% user_message = message.role == "user" %>
+  <% content = message.content.to_s.strip %>
+
+  <div class="d-flex align-items-end gap-2 w-100 mb-3 <%= user_message ? 'justify-content-end' : 'justify-content-start' %>">
+    <% unless user_message %>
+      <%= image_tag "aido avatar.png",
+                    class: "avatar flex-shrink-0",
+                    alt: "" %>
+    <% end %>
+
     <div class="message-bubble">
+      <strong><%= user_message ? "You" : "Aïdo" %></strong>
 
-      <% if message.role == "user" %>
-        <strong>You</strong>
-        <%= simple_format(message.content) %>
+      <% if !user_message && content.end_with?("[CHOICES]") %>
+        <% body = content.delete_suffix("[CHOICES]").rstrip %>
+        <% intro, *cards = body.split(/^###[ \t]+/) %>
 
-      <% else %>
-        <strong>AI Travel Assistant</strong>
+        <% if cards.size == 3 %>
+          <% if intro.present? %>
+            <div class="trip-markdown">
+              <%= sanitize(render_markdown(intro)) %>
+            </div>
+          <% end %>
 
-        <% content = message.content.rstrip %>
+          <% active_choices = index == messages.size - 1 %>
 
-        <div>
-          <%= sanitize(render_markdown(content.delete_suffix("[CHOICES]").rstrip)) %>
-        </div>
+          <%= tag.div class: "d-flex flex-column gap-3 mt-2",
+                      id: ("destination-choices" if active_choices) do %>
+            <% cards.each do |card| %>
+              <% destination = card.lines.first.to_s.strip %>
 
-        <% if content.end_with?("[CHOICES]") && index == messages.size - 1 %>
-          <div class="d-flex gap-2 mt-2">
-            <% (1..3).each do |number| %>
-              <%= button_to number.to_s,
-                            chat_messages_path(chat),
-                            method: :post,
-                            params: { message: { content: number.to_s } },
-                            class: "btn btn-outline-primary" %>
+              <div class="w-100">
+                <article class="card card-body h-100 rounded-4 position-relative">
+                  <div class="trip-markdown">
+                    <%= sanitize(render_markdown("### #{card.strip}")) %>
+                  </div>
+
+                  <% if active_choices %>
+                    <%= button_to chat_messages_path(chat),
+                                  method: :post,
+                                  params: { message: { content: destination } },
+                                  class: "stretched-link border-0 bg-transparent p-0" do %>
+                      <span class="visually-hidden">Choose <%= destination %></span>
+                    <% end %>
+                  <% end %>
+                </article>
+              </div>
             <% end %>
+          <% end %>
+        <% else %>
+          <div class="trip-markdown">
+            <%= sanitize(render_markdown(body)) %>
           </div>
         <% end %>
+      <% else %>
+        <div class="trip-markdown">
+          <%= sanitize(render_markdown(user_message ? content : content.delete_suffix("[ITINERARY]").rstrip)) %>
+        </div>
 
-        <% previous_message = messages[index - 1] if index.positive? %>
-
-        <% if previous_message&.role == "user" &&
-              %w[1 2 3].include?(previous_message.content.strip) %>
+        <% if !user_message && content.end_with?("[ITINERARY]") %>
           <%= button_to "Confirm this destination",
                         chat_results_path(chat),
                         method: :post,
                         params: { message_id: message.id },
-                        class: "btn btn-success" %>
+                        class: "btn btn-success mt-2" %>
         <% end %>
-
       <% end %>
-
     </div>
+
+    <% if user_message %>
+      <span class="avatar avatar-vert flex-shrink-0" aria-hidden="true">
+        <%= current_user.email.first.upcase %>
+      </span>
+    <% end %>
   </div>
 <% end %>

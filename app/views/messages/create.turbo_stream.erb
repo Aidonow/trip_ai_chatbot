@@ -1,4 +1,4 @@
-<%= turbo_stream.remove "destination-choices" %>
+<%= turbo_stream.remove_all "#messages .message-bubble article form" %>
 
 <%= turbo_stream.append "messages" do %>
   <%= render "messages/message",
