@@ -1,12 +1,23 @@
-<div class="chat-page"
+<div class="chat-page container-fluid px-2 px-md-4 px-lg-5"
      data-controller="chat"
      data-action="turbo:submit-start->chat#send turbo:submit-end->chat#finish">
 
-  <div class="chat-thread">
+  <div class="chat-thread w-100">
     <div id="messages"
-        data-chat-target="messages"
-        class="chat-messages"
-        style="overflow-anchor: none;">
+         class="chat-messages"
+         data-chat-target="messages">
+    <div id="messages" class="chat-messages" data-chat-target="messages">
+      <div class="d-flex w-100 mb-3 justify-content-start">
+        <div class="message-bubble">
+          <strong>Aïdo</strong>
+          <div class="trip-markdown">
+            <p>Hello! 👋 I’m Aïdo, your travel copilot. How many days do you have, and what’s your budget?</p>
+          </div>
+        </div>
+      </div>
+
+      <%= render "messages/message", messages: @messages, chat: @chat %>
+    </div>
       <%= render "messages/message", messages: @messages, chat: @chat %>
     </div>
 

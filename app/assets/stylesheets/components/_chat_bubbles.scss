@@ -33,20 +33,20 @@
   max-width: 75%;
   background-color: #EDF5F3;
   color: #111B21;
- 
+
 }
 
 /* Assistant : blanc, large et à gauche */
 #messages .justify-content-start .message-bubble {
-  width: 75%;
-  max-width: 900px;
+  width: 100%;
+  max-width: 100%;
   flex-shrink: 0;
   background-color: #FFFFFF;
   color: #111B21;
 }
 
 /* Nom de l'expéditeur */
-#messages .message-bubble strong {
+#messages .message-bubble > strong {
   display: block;
   margin-bottom: 6px;
   font-size: 13px;
@@ -70,4 +70,12 @@
   #messages .justify-content-start .message-bubble {
     width: 90%;
   }
+
+  .chat-page,
+  .chat-page .chat-thread,
+  .chat-page #messages {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
 }
