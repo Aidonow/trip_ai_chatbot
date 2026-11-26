@@ -25,21 +25,38 @@
     </div>
   </section>
 
-  <section class="home-history">
-    <div class="home-history__header">
-      <div>
+  <section class="home-history" data-controller="trip-search">
+      <div class="home-history__header">
         <h2>My trips</h2>
+
+        <% if @results.any? %>
+          <span class="home-trip-count" data-trip-search-target="count">
+            <%= pluralize(@results.size, "trip") %>
+          </span>
+        <% end %>
       </div>
 
       <% if @results.any? %>
-        <span class="home-trip-count"><%= pluralize(@results.count, "trip") %></span>
+        <div class="mb-3">
+          <label for="trip-search" class="visually-hidden">Search by destination</label>
+          <input id="trip-search"
+                type="search"
+                class="form-control rounded-pill px-3"
+                placeholder="Search by destination…"
+                data-action="input->trip-search#filter">
+        </div>
+
+        <p class="text-muted" data-trip-search-target="empty" hidden>
+          No trips match your search.
+        </p>
       <% end %>
-    </div>
 
     <% if @results.any? %>
       <div class="home-trip-grid">
         <% @results.each do |result| %>
-          <%= link_to result_path(result), class: "home-trip-card" do %>
+          <%= link_to result_path(result),
+            class: "home-trip-card",
+            data: { trip_search_target: "card", destination: result.destination.to_s } do %>
             <div class="home-trip-card__banner">
               <% if @result_images[result].present? %>
                 <%= image_tag @result_images[result],
