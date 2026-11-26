@@ -1,35 +1,31 @@
-<nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container-fluid">
-    <%= link_to root_path, class: "navbar-brand" do %>
-      <%= image_tag "logo.png" %>
+<nav class="navbar navbar-light navbar-lewagon">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+    <%= link_to root_path, class: "navbar-brand d-flex align-items-center gap-2" do %>
+      <%= image_tag "logo.png", alt: "" %>
       <span class="fw-bold fs-4 home-kicker">AÏDO</span>
     <% end %>
 
+    <% if user_signed_in? %>
+      <div class="dropdown">
+        <button type="button"
+                class="avatar avatar-vert"
+                id="navbarDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Open your account">
+          <%= current_user.email.first.upcase %>
+        </button>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto">
-        <% if user_signed_in? %>
-          <button type="button"
-                  class="avatar avatar-vert"
-                  id="navbarDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  aria-label="Open your account">
-            <%= current_user.email.first.upcase %>
-          </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
-            </div>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li>
+            <%= link_to "Log out", destroy_user_session_path,
+                        data: { turbo_method: :delete },
+                        class: "dropdown-item" %>
           </li>
-        <% end %>
-      </ul>
-    </div>
+        </ul>
+      </div>
+    <% else %>
+      <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+    <% end %>
   </div>
 </nav>
