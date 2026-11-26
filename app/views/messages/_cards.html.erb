@@ -1,0 +1,23 @@
+<div class="row g-3 my-2">
+  <% cards.each_with_index do |card, i| %>
+    <% photo = destination_photo(card["destination"]) %>
+    <div class="col-12 col-md-4">
+      <div class="destination-card"
+           style="<%= "background-image: url('#{photo}');" if photo %>">
+        <div class="destination-card__overlay">
+          <span class="badge bg-light text-dark"><%= i + 1 %></span>
+          <h5 class="mt-2 mb-1"><%= card["destination"] %></h5>
+          <p class="small mb-2"><%= card["summary"] %></p>
+
+          <% if selectable %>
+            <%= button_to "Choose",
+                          chat_messages_path(chat),
+                          method: :post,
+                          params: { message: { content: (i + 1).to_s } },
+                          class: "btn btn-light btn-sm" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
