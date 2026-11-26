@@ -1,17 +1,24 @@
 <div class="chat-page container-fluid px-2 px-md-4 px-lg-5"
      data-controller="chat"
-     data-action="turbo:submit-start->chat#send turbo:submit-end->chat#finish">
+     data-action="turbo:submit-start->chat#send turbo:submit-end->chat#finish"
+     data-user-initial="<%= current_user.email.first.upcase %>"
+     data-aido-avatar-url="<%= image_path('aido avatar.png') %>">
 
   <div class="chat-thread w-100">
     <div id="messages"
          class="chat-messages"
          data-chat-target="messages">
     <div id="messages" class="chat-messages" data-chat-target="messages">
-      <div class="d-flex w-100 mb-3 justify-content-start">
+      <div class="d-flex align-items-end gap-2 w-100 mb-3 justify-content-start">
+        <%= image_tag "aido avatar.png", class: "avatar flex-shrink-0", alt: "" %>
         <div class="message-bubble">
           <strong>Aïdo</strong>
           <div class="trip-markdown">
-            <p>Hello! 👋 I’m Aïdo, your travel copilot. How many days do you have, and what’s your budget?</p>
+            <p>
+              Hello! 👋 I’m <strong>Aïdo</strong>, your travel copilot. Tell me your <strong>departure city</strong>,
+              <strong>travel dates</strong>, <strong>trip duration</strong>, and <strong>budget</strong>.
+              I’ll suggest the best destinations for you!
+            </p>
           </div>
         </div>
       </div>

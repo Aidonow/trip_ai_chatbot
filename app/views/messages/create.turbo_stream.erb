@@ -1,3 +1,5 @@
+<%= turbo_stream.remove "pending-message" %>
+
 <%= turbo_stream.remove_all "#messages .message-bubble article form" %>
 
 <%= turbo_stream.append "messages" do %>
@@ -5,8 +7,6 @@
              messages: [@message, @assistant_message],
              chat: @chat %>
 <% end %>
-
-<%= turbo_stream.remove "pending-message" %>
 
 <%= turbo_stream.update "new_message_container" do %>
   <%= render "messages/form", chat: @chat, message: Message.new %>

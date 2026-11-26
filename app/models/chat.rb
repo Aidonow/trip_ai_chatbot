@@ -28,7 +28,7 @@ def generate_result_from_message(message)
       destination: details["destination"],
       price: details["price"],
       time: details["time"],
-      content: message.content
+      content: message.content.rstrip.delete_suffix("[ITINERARY]").rstrip
     )
     update!(result: trip)
     trip
