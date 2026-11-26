@@ -1,29 +1,33 @@
 <main class="home-page">
   <section class="home-hero">
     <div class="home-hero__content">
-      <p class="home-kicker">AI travel planner</p>
-      <h1>Your next trip,<br>planned in a chat.</h1>
+      <p class="home-kicker">Meet Aïdo, your travel copilot</p>
+
+      <h2>Where shall we fly?</h2>
+
       <p class="home-description">
-        Tell us where you want to go and what matters to you. We'll help you find the right adventure.
+        Chat with Aïdo. He’ll suggest the best destination for you. Let’s do it now!
       </p>
 
       <%= button_to chats_path,
                     method: :post,
                     class: "home-primary-button" do %>
-        Start planning
+        Chat with me
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       <% end %>
     </div>
 
-    <div class="home-hero__visual" aria-hidden="true">
-      <i class="fa-solid fa-plane"></i>
+    <div aria-hidden="true">
+    <%= image_tag "aido on plane.png",
+                  alt: "Aido on plane",
+                  width: 300,
+                  class: "d-block mx-auto img-fluid mb-3" %>
     </div>
   </section>
 
   <section class="home-history">
     <div class="home-history__header">
       <div>
-        <p class="home-kicker">Saved destinations</p>
         <h2>My trips</h2>
       </div>
 
