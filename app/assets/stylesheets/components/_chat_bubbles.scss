@@ -1,0 +1,73 @@
+
+/* Zone de conversation */
+#messages {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: transparent;
+}
+
+/* Chaque message occupe une ligne */
+#messages > .d-flex {
+  display: flex;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Style commun des bulles */
+#messages .message-bubble {
+  display: block;
+  min-width: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  overflow-wrap: break-word;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Utilisateur : vert, compact et à droite */
+#messages .justify-content-end .message-bubble {
+  width: fit-content;
+  max-width: 75%;
+  background-color: #EDF5F3;
+  color: #111B21;
+ 
+}
+
+/* Assistant : blanc, large et à gauche */
+#messages .justify-content-start .message-bubble {
+  width: 75%;
+  max-width: 900px;
+  flex-shrink: 0;
+  background-color: #FFFFFF;
+  color: #111B21;
+}
+
+/* Nom de l'expéditeur */
+#messages .message-bubble strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+/* Espacement du texte */
+#messages .message-bubble p:last-child {
+  margin-bottom: 0;
+}
+
+/* Adaptation aux téléphones */
+@media (max-width: 576px) {
+  #messages {
+    padding: 12px;
+  }
+
+  #messages .message-bubble {
+    max-width: 90%;
+  }
+
+  #messages .justify-content-start .message-bubble {
+    width: 90%;
+  }
+}
