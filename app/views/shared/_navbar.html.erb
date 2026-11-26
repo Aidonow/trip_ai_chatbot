@@ -2,7 +2,9 @@
   <div class="container-fluid">
     <%= link_to root_path, class: "navbar-brand" do %>
       <%= image_tag "logo.png" %>
+      <span class="fw-bold fs-4 home-kicker">AÏDO</span>
     <% end %>
+
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -12,7 +14,7 @@
       <ul class="navbar-nav me-auto">
         <% if user_signed_in? %>
           <button type="button"
-                  class="avatar avatar-blue"
+                  class="avatar avatar-vert"
                   id="navbarDropdown"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -20,8 +22,6 @@
             <%= current_user.email.first.upcase %>
           </button>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Action", "#", class: "dropdown-item" %>
-              <%= link_to "Another action", "#", class: "dropdown-item" %>
               <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
             </div>
         <% else %>

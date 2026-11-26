@@ -1,25 +1,17 @@
-<div class="container mt-5"
+<div class="chat-page"
      data-controller="chat"
      data-action="turbo:submit-start->chat#send turbo:submit-end->chat#finish">
-  <h1 class="text-center mb-4">AI Travel Assistant 🌍</h1>
 
-  <div class="card p-4 mb-4">
-    <h2 class="h5">Welcome!</h2>
-
-    <p>
-      Hello! 👋 I’m your AI travel assistant.
-      What kind of trip are you looking for?
-    </p>
-
+  <div class="chat-thread">
     <div id="messages"
         data-chat-target="messages"
-        class="chat-messages overflow-auto"
-        style="height: 50vh; overflow-anchor: none;">
+        class="chat-messages"
+        style="overflow-anchor: none;">
       <%= render "messages/message", messages: @messages, chat: @chat %>
     </div>
-  </div>
 
-  <div id="new_message_container">
-    <%= render "messages/form", chat: @chat, message: @message %>
+    <div id="new_message_container" class="chat-composer">
+      <%= render "messages/form", chat: @chat, message: @message %>
+    </div>
   </div>
 </div>

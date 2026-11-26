@@ -1,13 +1,23 @@
-# Trip AI Chatbot
+# AÏDO — Trip AI Chatbot
 
-A web application for planning trips through conversational interactions. Users can create an account, start chats, and review saved travel suggestions, including destination, estimated budget, and trip duration.
+AÏDO is an AI travel copilot that helps users plan trips through conversation. Create an account, chat with AÏDO for destination suggestions, and review saved trips with their estimated budget and duration.
 
 **Live application:** [trip-chatbot-7c8e98292082.herokuapp.com](https://trip-chatbot-7c8e98292082.herokuapp.com/)
+
+## Meet AÏDO
+
+AÏDO is the friendly travel companion who guides users through the trip-planning chat. The avatar represents AÏDO, while the flying illustration welcomes users on the home page.
+
+<p align="center">
+  <img src="app/assets/images/aido%20avatar.png" alt="AÏDO travel companion avatar" width="220">
+  &nbsp;&nbsp;&nbsp;
+  <img src="app/assets/images/aido%20on%20plane.png" alt="AÏDO flying on a paper plane" width="220">
+</p>
 
 ## Features
 
 - User registration and authentication with Devise
-- Conversations associated with user accounts
+- Conversational trip planning with AÏDO
 - Persistent messages and travel suggestions
 - A history of saved suggestions with individual detail pages
 - RubyLLM configuration for OpenAI integration
