@@ -25,12 +25,12 @@
 
           <% active_choices = index == messages.size - 1 %>
 
-          <%= tag.div class: "d-flex flex-column gap-3 mt-2",
+          <%= tag.div class: "d-flex flex-column flex-md-row gap-3 mt-2",
                       id: ("destination-choices" if active_choices) do %>
             <% cards.each do |card| %>
               <% destination = card.lines.first.to_s.strip %>
 
-              <div class="w-100">
+              <div class="col">
                 <article class="card card-body h-100 rounded-4 position-relative">
                   <div class="trip-markdown">
                     <%= sanitize(render_markdown("### #{card.strip}")) %>

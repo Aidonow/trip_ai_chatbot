@@ -3,30 +3,40 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["messages"]
 
-  send(event) {
-    const form = event.target
-    const content = new FormData(form).get("message[content]")?.trim()
-    if (!content) return
+send(event) {
+  const form = event.target
+  const content = new FormData(form).get("message[content]")?.trim()
+  if (!content) return
 
-    const bubble = document.createElement("div")
-    bubble.id = "pending-message"
-    bubble.className = "mb-3"
+  const pending = document.createElement("div")
+  pending.id = "pending-message"
 
-    const author = document.createElement("strong")
-    author.textContent = "You"
+  pending.innerHTML = `
+    <div class="d-flex justify-content-end w-100 mb-3">
+      <div class="message-bubble">
+        <strong>You</strong>
+        <p class="mb-0"></p>
+      </div>
+    </div>
 
-    const text = document.createElement("p")
-    text.textContent = content
+    <div class="d-flex justify-content-start w-100 mb-3">
+      <div class="message-bubble">
+        <strong>Aïdo</strong>
+        <small class="text-muted" role="status">Aïdo is typing…</small>
+      </div>
+    </div>
+  `
 
-    const status = document.createElement("small")
-    status.className = "text-muted"
-    status.setAttribute("role", "status")
-    status.textContent = "AI Travel is typing…"
+  pending.querySelector("p").textContent = content
+  this.messagesTarget.append(pending)
+  this.pendingBubble = pending
 
-    bubble.append(author, text, status)
-    this.messagesTarget.append(bubble)
-    this.pendingBubble = bubble
-  }
+// La première ligne de pending contient le message « You ».
+  pending.firstElementChild.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+})
+}
 
   finish(event) {
     if (!event.detail.success) {

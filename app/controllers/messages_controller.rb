@@ -17,7 +17,7 @@ SYSTEM_PROMPT = <<~PROMPT
   - If the user asks for other ideas, keep the agreed trip details and suggest
     three different destinations.
 
-  Suggest three clickable destinations
+  Suggest three clickable destinations and ask user to choice one by click on card:
   - Once you have enough information, suggest exactly three destinations.
     Start with one short sentence summarizing the departure city, dates,
     duration, and budget.
@@ -90,6 +90,18 @@ def create
       content: response.content
     )
   end
+
+  history_id = helpers.dom_id(@chat, :history)
+
+  Turbo::StreamsChannel.broadcast_replace_to(
+    @chat, :messages,
+    target: history_id,
+    html: helpers.turbo_frame_tag(
+      history_id,
+      src: chat_path(@chat),
+      target: "_top"
+    )
+  )
 
   respond_to do |format|
     format.turbo_stream
