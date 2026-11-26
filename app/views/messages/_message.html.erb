@@ -1,37 +1,46 @@
+
 <% messages.each_with_index do |message, index| %>
-  <div class="mb-3">
-    <% if message.role == "user" %>
-      <strong>You</strong>
-      <%= simple_format(message.content) %>
-    <% else %>
-      <strong>AI Travel Assistant</strong>
+  <div class="d-flex w-100 mb-3 <%= message.role == 'user' ? 'justify-content-end' : 'justify-content-start' %>">
+    <div class="message-bubble">
 
-      <% content = message.content.rstrip %>
-      <div>
-        <%= sanitize(render_markdown(content.delete_suffix("[CHOICES]").rstrip)) %>
-      </div>
+      <% if message.role == "user" %>
+        <strong>You</strong>
+        <%= simple_format(message.content) %>
 
-      <% if content.end_with?("[CHOICES]") && index == messages.size - 1 %>
-        <div class="d-flex gap-2 mt-2">
-          <% (1..3).each do |number| %>
-            <%= button_to number.to_s,
-                          chat_messages_path(chat),
-                          method: :post,
-                          params: { message: { content: number.to_s } },
-                          class: "btn btn-outline-primary" %>
-          <% end %>
+      <% else %>
+        <strong>AI Travel Assistant</strong>
+
+        <% content = message.content.rstrip %>
+
+        <div>
+          <%= sanitize(render_markdown(content.delete_suffix("[CHOICES]").rstrip)) %>
         </div>
+
+        <% if content.end_with?("[CHOICES]") && index == messages.size - 1 %>
+          <div class="d-flex gap-2 mt-2">
+            <% (1..3).each do |number| %>
+              <%= button_to number.to_s,
+                            chat_messages_path(chat),
+                            method: :post,
+                            params: { message: { content: number.to_s } },
+                            class: "btn btn-outline-primary" %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <% previous_message = messages[index - 1] if index.positive? %>
+
+        <% if previous_message&.role == "user" &&
+              %w[1 2 3].include?(previous_message.content.strip) %>
+          <%= button_to "Confirm this destination",
+                        chat_results_path(chat),
+                        method: :post,
+                        params: { message_id: message.id },
+                        class: "btn btn-success" %>
+        <% end %>
+
       <% end %>
 
-      <% previous_message = messages[index - 1] if index.positive? %>
-      <% if previous_message&.role == "user" &&
-            %w[1 2 3].include?(previous_message.content.strip) %>
-        <%= button_to "Confirm this destination",
-                      chat_results_path(chat),
-                      method: :post,
-                      params: { message_id: message.id },
-                      class: "btn btn-success" %>
-      <% end %>
-    <% end %>
+    </div>
   </div>
 <% end %>
